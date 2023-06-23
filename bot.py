@@ -11,8 +11,8 @@ load_dotenv()
 intents = discord.Intents.default()
 intents.message_content = True
 
-
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='a')
+logFilePath = os.getenv('DISCORD_LOG_FILE')
+handler = logging.FileHandler(filename=logFilePath, encoding='utf-8', mode='a')
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
@@ -106,4 +106,4 @@ async def ralsei(ctx):
 async def morgott(ctx):
     await ctx.channel.send("https://files.calced.net/morgott.png")
 
-bot.run(os.getenv('DISCORD_TOKEN'), log_handler=handler)
+bot.run(os.getenv('DISCORD_TOKEN'), log_handler=handler, log_level=logging.DEBUG)

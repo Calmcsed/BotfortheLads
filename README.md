@@ -1,4 +1,4 @@
-#BotfortheLads
+# BotfortheLads
 
 This is abot that is currently running on an Ubuntu machine. This bot is written in python and is based off an older repository but reworked to run in linux.
 
@@ -20,7 +20,7 @@ Sends a picture of a beanis
 ### !boy
 Sends a gif of our beloved popped sickle
 
-### ! c
+### !c
 Converts the at.tumblr.com link to a regular permalink
 
 This function is a bit defunct, I have no idea to what capacity it works anymore.
