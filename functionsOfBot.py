@@ -94,13 +94,13 @@ def sendHotkey(author_id, hotkey):
         fileName = dir + "hotkey/" + str(author_id) + ".txt"
         
         line = searchFile((dir+"hotkey/everyone.txt"), hotkey[0])
-        if line == "ERR":
+        if line[0] == "ERR":
             line = searchFile(fileName, hotkey[0])
         
-        if  line != "ERR":
-            link = line[(line.find(',',line.find(',', 0)+1))+1:]
+        if  line[0] != "ERR":
+            link = line[2]
         else:
-            link = "ERROR: You do not have any hotkeys set up."
+            link = "ERROR: You do not have this hotkey set up."
     return link
 
 def addHotkey(author_id, hotkey):
@@ -133,21 +133,22 @@ def addHotkey(author_id, hotkey):
             
     return returnVal
 
-def matchHotkey(line, hotkey):
+def getData(line):
     posFirstComma = line.find(',', 0)
     hotkeyName = line[:posFirstComma]
-    hotkeyAlias = line[posFirstComma+1:line.find(',', posFirstComma)]
-
-    return hotkey == hotkeyName or hotkey == hotkeyAlias
+    hotkeyAlias = line[posFirstComma+1:line.find(',', posFirstComma+1)]
+    hotkeyLink = line[line.find(',', posFirstComma+1)+1:]
+    
+    return [hotkeyName, hotkeyAlias, hotkeyLink]
 
 def searchFile(fileName, hotkey):
-    ret = "ERR"
+    ret = ["ERR"]
     if os.path.exists(fileName):
             file = open(fileName)
             for data in enumerate(file):
-                line = data[1]
-                if matchHotkey(line, hotkey):
-                    ret = line
+                nameAlias = getNameAlias(data[1])
+                if hotkey[0] == nameAlias[0] or hotkey[1] == nameAlias[1]:
+                    ret = nameAlias
                     break
             file.close()
     return ret
@@ -176,32 +177,28 @@ def lhkAll(commonFile, userFile):
     returnText = "```\nCommon hotkeys:\n"
     with open(commonFile) as cf:
         for data in enumerate(cf):
-            line = data[1]
-            firstCommaPos = line.find(",", 0)
-            secondCommaPos = line.find(",", firstCommaPos+1)
+            nameAlias = getData(data[1])
             
-            returnText += line[:firstCommaPos]
-            if line[:firstCommaPos] == line[firstCommaPos+1:secondCommaPos]:
-                returnText += " (Alias: " + line[firstCommaPos+1:secondCommaPos] + ")"
+            returnText += nameAlias[0]
+            if nameAlias[0] != nameAlias[1]:
+                returnText += " (Alias: " + nameAlias[1] + ")"
             else:
                 returnText += " (No alias)"
-            returnText += " -> " + line[secondCommaPos+1:] + "\n"
+            returnText += " -> " + nameAlias[2] + "\n"
 
-    returnText += "Your hotkeys:\n"
+    returnText += "\nYour hotkeys:\n"
     
     if os.path.exists(userFile):
         with open(userFile) as uf:
             for data in enumerate(uf):
-                line = data[1]
-                firstCommaPos = line.find(",", 0)
-                secondCommaPos = line.find(",", firstCommaPos+1)
-                
-                returnText += line[:firstCommaPos]
-                if line[:firstCommaPos] == line[firstCommaPos+1:secondCommaPos]:
-                    returnText += " (Alias: " + line[firstCommaPos+1:secondCommaPos] + ")"
+                nameAlias = getData(data[1])
+            
+                returnText += nameAlias[0]
+                if nameAlias[0] != nameAlias[1]:
+                    returnText += " (Alias: " + nameAlias[1] + ")"
                 else:
                     returnText += " (No alias)"
-                returnText += " -> " + line[secondCommaPos+1:] + "\n"
+                returnText += " -> " + nameAlias[2] + "\n"
     else:
         returnText += "You have no hotkeys. Use !addhotkey to make some.\n"
     
