@@ -144,13 +144,12 @@ def getData(line):
 def searchFile(fileName, hotkey):
     ret = ["ERR"]
     if os.path.exists(fileName):
-            file = open(fileName)
-            for data in enumerate(file):
-                nameAlias = getData(data[1])
-                if hotkey == nameAlias[0] or hotkey == nameAlias[1]:
-                    ret = nameAlias
-                    break
-            file.close()
+            with open(fileName) as file:
+                for data in enumerate(file):
+                    nameAlias = getData(data[1])
+                    if hotkey == nameAlias[0] or hotkey == nameAlias[1]:
+                        ret = nameAlias
+                        break
     return ret
 
 def listHotkey(author_id, args):
@@ -228,4 +227,20 @@ def lhkName(commonFile, userFile):
     return returnText
 
 def delHotkey(author_id, hotkey):
-    return "DELHOTKEYSTUB"
+    tempFileName = dir + "hotkey/" + str(author_id)
+    fileName = tempFileName + ".txt"
+    returnVal = ""
+    if not os.path.exists(fileName):
+        returnVal = "ERROR: You do not have any hotkeys to delete!"
+    else:
+        file = open(tempFileName, "w")
+        with open(fileName) as cf:
+            for data in enumerate(cf):
+                line = getData(data[1])
+                if line[0] != hotkey:
+                    file.write(line[0] + "," + line[1] + "," + line[2])
+        file.close()
+        os.remove(fileName)
+        os.rename(tempFileName,fileName)
+        returnVal = "Successfully deleted."
+    return returnVal
