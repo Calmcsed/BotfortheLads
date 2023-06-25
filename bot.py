@@ -11,8 +11,8 @@ load_dotenv()
 intents = discord.Intents.default()
 intents.message_content = True
 
-logFilePath = os.getenv('DISCORD_LOG_FILE')
-handler = logging.FileHandler(filename=logFilePath, encoding='utf-8', mode='a')
+
+handler = logging.FileHandler(filename=(os.getenv('DISCORD_DIR')+"discord.log"), encoding='utf-8', mode='a')
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
@@ -80,7 +80,8 @@ async def hotkey(ctx, *args):
 @bot.command(
     help = ("List all created hotkeys." + 
     "\n Command format is !listhotkey [-all (for all details), -name (for only the names)]. For example, listing all available hotkey is !listhotkey -all." + 
-    "\n To add a new hotkey, do !addhotkey. To invoke a hotkey, do !hotkey. To delete a hotkey, do !delhotkey.")
+    "\n To add a new hotkey, do !addhotkey. To invoke a hotkey, do !hotkey. To delete a hotkey, do !delhotkey."),
+    aliases = ['lhk']
 )
 async def listhotkey(ctx, *args):
     await ctx.channel.send(listHotkey(ctx.author.id, args))
@@ -88,7 +89,8 @@ async def listhotkey(ctx, *args):
 @bot.command(
     help = ("Delete a hotkey." + 
     "\n Command format is !delhotkey [name of hotkey or its alias]" + 
-    "\n To add a new hotkey, do !addhotkey. To list your hotkeys, do !listhotkey. To invoke a hotkey, do !hotkey.")
+    "\n To add a new hotkey, do !addhotkey. To list your hotkeys, do !listhotkey. To invoke a hotkey, do !hotkey."),
+    aliases = ['dhk']
 )
 async def delhotkey(ctx, *args):
     await ctx.channel.send(delHotkey(ctx.author.id, args))
@@ -96,47 +98,10 @@ async def delhotkey(ctx, *args):
 @bot.command(
     help = ("Create a new hotkey. If given an existing hotkey name, will edit the link." +
     "\n Command format is !addhotkey [name of hotkey] [link to send] [alias (optional)]" + 
-    "\n!hotkey  To invoke a hotkey, do !hotkey. To list your hotkeys, do !listhotkey")
+    "\n!hotkey  To invoke a hotkey, do !hotkey. To list your hotkeys, do !listhotkey"),
+    aliases = ['ahk']
 )
 async def addhotkey(ctx, *args):
     await ctx.channel.send(addHotkey(ctx.author.id, args))
-
-@bot.command(
-    help = "Sends a gif of an enchanted stick, or a superbonk",
-    brief = "Use this against your horny friends for massive damage"
-)
-async def superbonk(ctx):
-    await ctx.channel.send("https://files.calced.net/DebugStick.gif")
-
-@bot.command(
-    help = "Sends a gif of a banana",
-    brief = "KRIS GET THE BANANA"
-)
-async def banana(ctx):
-    await ctx.channel.send("https://files.calced.net/365.gif")
-
-@bot.command(
-    help = "Send a gif of our beloved popped sickle"
-)
-async def boy(ctx):
-    await ctx.channel.send("https://files.calced.net/poppedsickle.gif")
-
-@bot.command(
-    help = "Send a picture of a beanis"
-)
-async def beanis(ctx):
-    await ctx.channel.send("https://files.calced.net/beanis.png")
-
-@bot.command(
-    help = "Send a picture of a ralsei splat"
-)
-async def ralsei(ctx):
-    await ctx.channel.send("https://files.calced.net/ralsei.png")
-
-@bot.command(
-    help = "Send a picture of a AOUUGHHHUHG I HATE HIM"
-)
-async def morgott(ctx):
-    await ctx.channel.send("https://files.calced.net/morgott.png")
 
 bot.run(os.getenv('DISCORD_TOKEN'), log_handler=handler)

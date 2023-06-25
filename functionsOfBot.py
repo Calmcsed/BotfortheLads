@@ -1,6 +1,9 @@
 import discord
-from os.path import exists
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+dir = os.getenv('DISCORD_DIR')
 swears = ["cock", "cum", "pussy", "penis", "balls", "cumming", "dong"]
 
 def isProfane(message, mid):
@@ -84,12 +87,15 @@ def betterLink(message):
 
 def sendHotkey(author_id, hotkey):
     link = ""
+    
     if len(hotkey) != 1:
         link = "ERROR: You have given an invalid command. You have given either too much or too little information."
     else:
-        fileName = "hotkey\\" + str(author_id) + ".txt"
+        fileName = dir + "hotkey/" + str(author_id) + ".txt"
         
-        line = searchFile(fileName, hotkey[0])
+        line = searchFile((dir+"hotkey/everyone.txt"), hotkey[0])
+        if line == "ERR":
+            line = searchFile(fileName, hotkey[0])
         
         if  line != "ERR":
             link = line[(line.find(',',line.find(',', 0)+1))+1:]
@@ -102,9 +108,8 @@ def addHotkey(author_id, hotkey):
     if len(hotkey) < 2:
         returnVal = "ERROR: You have given insuffcient amount of data for this command to work. Consult !help sethotkey for more information."
     else:
-        fileName = "hotkey\\" + str(author_id) + ".txt"
-        
-        if not exists(fileName):
+        fileName = dir + "hotkey/" + str(author_id) + ".txt"
+        if not os.path.exists(fileName):
             file = open(fileName, "w")
             file.close()
         
@@ -137,7 +142,7 @@ def matchHotkey(line, hotkey):
 
 def searchFile(fileName, hotkey):
     ret = "ERR"
-    if exists(fileName):
+    if os.path.exists(fileName):
             file = open(fileName)
             for data in enumerate(file):
                 line = data[1]
@@ -148,7 +153,24 @@ def searchFile(fileName, hotkey):
     return ret
 
 def listHotkey(author_id, args):
-    return "LISTHOTKEYSTUB"
+    returnText = ""
+
+    if len(args) > 1:
+        returnText = "ERROR: Invalid command given."
+    
+    else:
+        commonFile = dir + "hotkey/everyone.txt"
+        userFile = dir + "hotkey/" + str(author_id) + ".txt"
+        
+        if len(args) == 0 or args[0] == "-name" or args[0] == "-n":
+            returnText = lhkName(commonFile, userFile)
+
+        elif args[0] == "-all" or args[0] == "-a":
+            returnText = lhkAll(commonFile, userFile)
+        
+        else:
+            returnText = "ERROR: Invalid option given. Available options are \"-name (or -n)\" and \"-all (or -a)\""    
+    return returnText
 
 def delHotkey(author_id, hotkey):
     return "DELHOTKEYSTUB"
