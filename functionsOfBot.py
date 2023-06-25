@@ -172,5 +172,54 @@ def listHotkey(author_id, args):
             returnText = "ERROR: Invalid option given. Available options are \"-name (or -n)\" and \"-all (or -a)\""    
     return returnText
 
+def lhkAll(commonFile, userFile):
+    returnText = "```\nCommon hotkeys:\n"
+    with open(commonFile) as cf:
+        for data in enumerate(cf):
+            line = data[1]
+            firstCommaPos = line.find(",", 0)
+            secondCommaPos = line.find(",", firstCommaPos+1)
+            
+            returnText += line[:firstCommaPos]
+            if line[:firstCommaPos] == line[firstCommaPos+1:secondCommaPos]:
+                returnText += " (Alias: " + line[firstCommaPos+1:secondCommaPos] + ")"
+            else:
+                returnText += " (No alias)"
+            returnText += " -> " + line[secondCommaPos+1:] + "\n"
+
+    returnText += "Your hotkeys:\n"
+    
+    if os.path.exists(userFile):
+        with open(userFile) as uf:
+            for data in enumerate(uf):
+                line = data[1]
+    else:
+        returnText += "You have no hotkeys. Use !addhotkey to make some.\n"
+    
+    returnText += "```"
+    return returnText
+
+def lhkName(commonFile, userFile):
+    returnText = "```\nCommon hotkeys:\n"
+    with open(commonFile) as cf:
+        for data in enumerate(cf):
+            line = data[1]
+            returnText += line[:(line.find(",")+1)]
+    
+    returnText = returnText[:-1]
+    returnText += "\nYour hotkeys:\n"
+
+    if os.path.exists(userFile):
+        with open(userFile) as uf:
+            for data in enumerate(uf):
+                line = data[1]
+                returnText += line[:(line.find(",")+1)]
+    else:
+        returnText += "None,"
+    
+    returnText = returnText[:-1]
+    returnText += "\n```"
+    return returnText
+
 def delHotkey(author_id, hotkey):
     return "DELHOTKEYSTUB"
