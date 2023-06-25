@@ -193,6 +193,15 @@ def lhkAll(commonFile, userFile):
         with open(userFile) as uf:
             for data in enumerate(uf):
                 line = data[1]
+                firstCommaPos = line.find(",", 0)
+                secondCommaPos = line.find(",", firstCommaPos+1)
+                
+                returnText += line[:firstCommaPos]
+                if line[:firstCommaPos] == line[firstCommaPos+1:secondCommaPos]:
+                    returnText += " (Alias: " + line[firstCommaPos+1:secondCommaPos] + ")"
+                else:
+                    returnText += " (No alias)"
+                returnText += " -> " + line[secondCommaPos+1:] + "\n"
     else:
         returnText += "You have no hotkeys. Use !addhotkey to make some.\n"
     
