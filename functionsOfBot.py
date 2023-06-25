@@ -146,8 +146,8 @@ def searchFile(fileName, hotkey):
     if os.path.exists(fileName):
             file = open(fileName)
             for data in enumerate(file):
-                nameAlias = getNameAlias(data[1])
-                if hotkey[0] == nameAlias[0] or hotkey[1] == nameAlias[1]:
+                nameAlias = getData(data[1])
+                if hotkey == nameAlias[0] or hotkey == nameAlias[1]:
                     ret = nameAlias
                     break
             file.close()
