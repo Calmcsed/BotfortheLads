@@ -1,4 +1,5 @@
 import discord
+from os.path import exists
 
 swears = ["cock", "cum", "pussy", "penis", "balls", "cumming", "dong"]
 
@@ -80,3 +81,74 @@ def betterLink(message):
     index2 = message.find("/",index+1) + 1
     ret = "https://" + message[firstSlashIndex:index] + ".tumblr.com/" + message[index+1:index2]
     return ret
+
+def sendHotkey(author_id, hotkey):
+    link = ""
+    if len(hotkey) != 1:
+        link = "ERROR: You have given an invalid command. You have given either too much or too little information."
+    else:
+        fileName = "hotkey\\" + str(author_id) + ".txt"
+        
+        line = searchFile(fileName, hotkey[0])
+        
+        if  line != "ERR":
+            link = line[(line.find(',',line.find(',', 0)+1))+1:]
+        else:
+            link = "ERROR: You do not have any hotkeys set up."
+    return link
+
+def addHotkey(author_id, hotkey):
+    returnVal = ""
+    if len(hotkey) < 2:
+        returnVal = "ERROR: You have given insuffcient amount of data for this command to work. Consult !help sethotkey for more information."
+    else:
+        fileName = "hotkey\\" + str(author_id) + ".txt"
+        
+        if not exists(fileName):
+            file = open(fileName, "w")
+            file.close()
+        
+        found = False
+        if searchFile(fileName, hotkey[0]) != "ERR":
+            found = True
+
+        file = open(fileName, "a")
+        if not found: 
+            if len(hotkey) == 2:
+                writeLine = hotkey[0] + "," + hotkey[0]
+            elif len(hotkey) == 3:
+                writeLine = hotkey[0] + "," + hotkey[2]
+
+            writeLine +=  "," + hotkey[1] + "\n"
+            file.write(writeLine)
+            returnVal = "Successfully added!"
+        else:
+            returnVal = "ERROR: Hotkey name/alias overlaps with an existing hotkey."
+        file.close()
+            
+    return returnVal
+
+def matchHotkey(line, hotkey):
+    posFirstComma = line.find(',', 0)
+    hotkeyName = line[:posFirstComma]
+    hotkeyAlias = line[posFirstComma+1:line.find(',', posFirstComma)]
+
+    return hotkey == hotkeyName or hotkey == hotkeyAlias
+
+def searchFile(fileName, hotkey):
+    ret = "ERR"
+    if exists(fileName):
+            file = open(fileName)
+            for data in enumerate(file):
+                line = data[1]
+                if matchHotkey(line, hotkey):
+                    ret = line
+                    break
+            file.close()
+    return ret
+
+def listHotkey(author_id, args):
+    return "LISTHOTKEYSTUB"
+
+def delHotkey(author_id, hotkey):
+    return "DELHOTKEYSTUB"

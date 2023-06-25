@@ -63,6 +63,45 @@ async def uptime(ctx):
     await ctx.channel.send(getUptime((time.time() - starttime)))
 
 @bot.command(
+    help = "Converts the at.tumblr.com link to a regular permalink"
+)
+async def c(ctx, args):
+    await ctx.channel.send(betterLink(args.lower()))
+
+@bot.command(
+    help = ("Invoke a hot key you have already created." + 
+    "\n Command format is !hotkey [name of the hotkey or its alias]" + 
+    "\n To add a new hotkey, do !addhotkey. To list your hotkeys, do !listhotkey. To delete a hotkey, do !delhotkey."),
+    aliases = ["h"]
+)
+async def hotkey(ctx, *args):
+    await ctx.channel.send(sendHotkey(ctx.author.id, args))
+
+@bot.command(
+    help = ("List all created hotkeys." + 
+    "\n Command format is !listhotkey [-all (for all details), -name (for only the names)]. For example, listing all available hotkey is !listhotkey -all." + 
+    "\n To add a new hotkey, do !addhotkey. To invoke a hotkey, do !hotkey. To delete a hotkey, do !delhotkey.")
+)
+async def listhotkey(ctx, *args):
+    await ctx.channel.send(listHotkey(ctx.author.id, args))
+    
+@bot.command(
+    help = ("Delete a hotkey." + 
+    "\n Command format is !delhotkey [name of hotkey or its alias]" + 
+    "\n To add a new hotkey, do !addhotkey. To list your hotkeys, do !listhotkey. To invoke a hotkey, do !hotkey.")
+)
+async def delhotkey(ctx, *args):
+    await ctx.channel.send(delHotkey(ctx.author.id, args))
+
+@bot.command(
+    help = ("Create a new hotkey. If given an existing hotkey name, will edit the link." +
+    "\n Command format is !addhotkey [name of hotkey] [link to send] [alias (optional)]" + 
+    "\n!hotkey  To invoke a hotkey, do !hotkey. To list your hotkeys, do !listhotkey")
+)
+async def addhotkey(ctx, *args):
+    await ctx.channel.send(addHotkey(ctx.author.id, args))
+
+@bot.command(
     help = "Sends a gif of an enchanted stick, or a superbonk",
     brief = "Use this against your horny friends for massive damage"
 )
@@ -75,12 +114,6 @@ async def superbonk(ctx):
 )
 async def banana(ctx):
     await ctx.channel.send("https://files.calced.net/365.gif")
-
-@bot.command(
-    help = "Converts the at.tumblr.com link to a regular permalink"
-)
-async def c(ctx, args):
-    await ctx.channel.send(betterLink(args.lower()))
 
 @bot.command(
     help = "Send a gif of our beloved popped sickle"
@@ -106,4 +139,4 @@ async def ralsei(ctx):
 async def morgott(ctx):
     await ctx.channel.send("https://files.calced.net/morgott.png")
 
-bot.run(os.getenv('DISCORD_TOKEN'), log_handler=handler, log_level=logging.DEBUG)
+bot.run(os.getenv('DISCORD_TOKEN'), log_handler=handler)
