@@ -114,7 +114,7 @@ def addHotkey(author_id, hotkey):
             file.close()
         
         found = False
-        if searchFile(fileName, hotkey[0]) != "ERR":
+        if searchFile(fileName, hotkey[0]) != ["ERR"]:
             found = True
 
         file = open(fileName, "a")
@@ -233,14 +233,17 @@ def delHotkey(author_id, hotkey):
     if not os.path.exists(fileName):
         returnVal = "ERROR: You do not have any hotkeys to delete!"
     else:
-        file = open(tempFileName, "w")
-        with open(fileName) as cf:
-            for data in enumerate(cf):
-                line = getData(data[1])
-                if line[0] != hotkey:
-                    file.write(line[0] + "," + line[1] + "," + line[2])
-        file.close()
-        os.remove(fileName)
-        os.rename(tempFileName,fileName)
-        returnVal = "Successfully deleted."
+        if len(hotkey) == 1:
+            file = open(tempFileName, "w")
+            with open(fileName) as cf:
+                for data in enumerate(cf):
+                    line = getData(data[1])
+                    if line[0] != hotkey:
+                        file.write(line[0] + "," + line[1] + "," + line[2])
+            file.close()
+            os.remove(fileName)
+            os.rename(tempFileName,fileName)
+            returnVal = "Successfully deleted."
+        else:
+            returnVal = "ERROR: Invalid argument given."
     return returnVal
