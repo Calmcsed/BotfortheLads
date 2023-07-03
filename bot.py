@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 from functionsOfBot import *
+from hotkeyFunctions import *
 import os
 import time
 import logging
