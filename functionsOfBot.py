@@ -82,9 +82,9 @@ def betterLink(message):
     return ret
 
 def convertFunction(args):
-    impUnits = ["lb", "mi", "gal"]
-    convUnits = [0.4535924, 1.609344, 4.54609]
-    metUnits = ["kg", "km", "l"]
+    impUnits = ["lb", "mi", "gal", "f", "ft"]
+    convUnits = [0.4535924, 1.609344, 4.54609, 0, 0.3048]
+    metUnits = ["kg", "km", "l", "c", "m"]
 
     if len(args) == 2:
         try:
