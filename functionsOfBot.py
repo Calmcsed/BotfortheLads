@@ -80,3 +80,43 @@ def betterLink(message):
     index2 = message.find("/",index+1) + 1
     ret = "https://" + message[firstSlashIndex:index] + ".tumblr.com/" + message[index+1:index2]
     return ret
+
+def convertFunction(args):
+    impUnits = ["lb", "mi", "gal"]
+    convUnits = [0.4535924, 1.609344, 4.54609]
+    metUnits = ["kg", "km", "l"]
+
+    if len(args) == 2:
+        try:
+            float(args[0])
+        except:
+            return "ERROR: Invalid inputs given."
+        else:
+            val = float(args[0])                
+            unit = args[1].lower()       
+            result = 0
+            retUnit = ""
+
+            if unit == "c":
+                result = (9*val/5) + 32
+                retUnit = "F"
+            elif unit == "f":
+                result = (5/9) * (val-32)
+                retUnit = "C"
+            else:
+                try:
+                    index = impUnits.index(unit)
+                except:
+                    try:
+                        index = metUnits.index(unit)
+                    except:
+                        return "ERROR: Invalid units given. Valid options are: " + str(impUnits) + ", " + str(metUnits)
+                    else:
+                        result = val / convUnits[index]
+                        retUnit = impUnits[index]
+                else:
+                    result = val * convUnits[index]
+                    retUnit =  metUnits[index]
+            return str(val) + " " + unit + " converts to " + str(round(result,4)) + " " + retUnit + "."
+    else:
+        return "ERROR: Invalid number of arguments given."

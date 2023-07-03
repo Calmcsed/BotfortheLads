@@ -64,10 +64,12 @@ async def uptime(ctx):
     await ctx.channel.send(getUptime((time.time() - starttime)))
 
 @bot.command(
-    help = "Converts the at.tumblr.com link to a regular permalink"
+    help = ("Converts a message between imperial and metric (and vice versa). To use this command, do: !convert [number (ex. 50,30)] [unit (ex. lbs, kg)]"
+            + "\nList of supported conversions: lb/kg, m/mi, C/F, gal/l"),
+    aliases = ["cv"]
 )
-async def c(ctx, args):
-    await ctx.channel.send(betterLink(args.lower()))
+async def convert(ctx, *args):
+    await ctx.channel.send(convertFunction(args))
 
 @bot.command(
     help = ("Invoke a hot key you have already created." + 
