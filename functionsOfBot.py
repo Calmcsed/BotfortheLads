@@ -1,5 +1,5 @@
 import discord
-
+import datetime as dt
 swears = ["cock", "cum", "pussy", "penis", "balls", "cumming", "dong"]
 
 def isProfane(message, mid):
@@ -120,3 +120,31 @@ def convertFunction(args):
             return str(val) + " " + unit + " converts to " + str(round(result,4)) + " " + retUnit + "."
     else:
         return "ERROR: Invalid number of arguments given."
+
+# Got rid of all of this code because turns out you need to have an offset for each timezone you are in, which I will do another day.
+""" def getUTCTime(dateTimeTuple):
+    if len(dateTimeTuple) == 2 or len(dateTimeTuple) == 3:
+        dates = dateTimeTuple[0].split("-")
+
+        timeStr = dateTimeTuple[1]
+        timeSepIndex = timeStr.index(":")
+        times = [timeStr[:timeSepIndex], timeStr[(timeSepIndex+1):(timeSepIndex+3)]]
+
+        argsCmd = dates + times
+
+        for i in range(len(argsCmd)):
+            try:
+                argsCmd[i] = int(argsCmd[i])
+            except:
+                return "ERROR: Invalid time given."
+
+        if (argsCmd[3] > 12 and len(dateTimeTuple) == 3):
+            return "ERROR: Invalid time given."
+        
+        if (argsCmd[3] < 12 and "PM" in dateTimeTuple[2]):
+            argsCmd[3] += 12
+
+        return ("<t:" + str((dt.datetime(argsCmd[2],argsCmd[1],argsCmd[0],argsCmd[3],argsCmd[4]).replace(tzinfo=dt.timezone.utc)).timestamp())[:-2] + ">")
+    else:
+        return "ERROR: Invalid format given." """
+
