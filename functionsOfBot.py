@@ -86,37 +86,35 @@ def convertFunction(args):
     convUnits = [0.4535924, 1.609344, 4.54609, 0, 0.3048, 2.54]
     metUnits = ["kg", "km", "l", "c", "m", "cm"]
 
-    if len(args) == 2:
+    if len(args) == 2 or len(args) == 3:
         try:
-            float(args[0])
+            val = float(args[0])
         except:
             return "ERROR: Invalid inputs given."
         else:
-            val = float(args[0])                
             unit = args[1].lower()       
             result = 0
             retUnit = ""
+            if unit in impUnits:
+                index = impUnits.index(unit)
 
-            if unit == "c":
-                result = (9*val/5) + 32
-                retUnit = "F"
-            elif unit == "f":
-                result = (5/9) * (val-32)
-                retUnit = "C"
-            else:
-                try:
-                    index = impUnits.index(unit)
-                except:
-                    try:
-                        index = metUnits.index(unit)
-                    except:
-                        return "ERROR: Invalid units given. Valid options are: " + str(impUnits) + ", " + str(metUnits)
-                    else:
-                        result = val / convUnits[index]
-                        retUnit = impUnits[index]
+                if unit == "f":
+                    result = (5/9) * (val-32)
                 else:
                     result = val * convUnits[index]
-                    retUnit =  metUnits[index]
+                
+                retUnit =  metUnits[index]
+            elif unit in metUnits:
+                index = metUnits.index(unit)
+
+                if unit == "c":
+                    result = (9*val/5) + 32
+                else:
+                    result = val / convUnits[index]
+
+                retUnit = impUnits[index]
+            else:
+                return "ERROR: Invalid units given. Valid options are: " + str(impUnits) + ", " + str(metUnits)
             return str(val) + " " + unit + " converts to " + str(round(result,4)) + " " + retUnit + "."
     else:
         return "ERROR: Invalid number of arguments given."

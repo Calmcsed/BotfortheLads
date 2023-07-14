@@ -64,8 +64,7 @@ async def uptime(ctx):
     await ctx.channel.send(getUptime((time.time() - starttime)))
 
 @bot.command(
-    help = ("Converts a message between imperial and metric (and vice versa). To use this command, do: !convert [number (ex. 50,30)] [unit (ex. lbs, kg)]"
-            + "\nList of supported conversions: lb/kg, m/mi, C/F, gal/l"),
+    help = ("Converts a message between imperial and metric (and vice versa). To use this command, do: !convert [number (ex. 50,30)] [unit (ex. lbs, kg)]"),
     aliases = ["cv"]
 )
 async def convert(ctx, *args):
