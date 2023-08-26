@@ -144,24 +144,24 @@ def lhkName(commonFile, userFile):
     returnText += "\n```"
     return returnText
 
-def delHotkey(author_id, hotkey):
-    tempFileName = dir + "hotkey/" + str(author_id)
-    fileName = tempFileName + ".txt"
+def delHotkey(author_id, args):
     returnVal = ""
+    fileName = dir + "hotkey/" + str(author_id) + ".txt"
     if not os.path.exists(fileName):
         returnVal = "ERROR: You do not have any hotkeys to delete!"
     else:
-        if len(hotkey) == 1:
-            file = open(tempFileName, "w")
-            with open(fileName) as cf:
-                for data in enumerate(cf):
-                    line = getData(data[1])
-                    if line[0] != hotkey:
-                        file.write(line[0] + "," + line[1] + "," + line[2])
-            file.close()
-            os.remove(fileName)
-            os.rename(tempFileName,fileName)
+        if len(args) == 1:
+            hotkey = args[0]
+            with open(fileName, "r+") as fread:
+                lines = fread.readlines()
+                fread.seek(0)
+                for line in lines:
+                    lineData = getData(line)
+                    if(lineData[0] != hotkey):
+                        fread.write(line)
+                fread.truncate()
             returnVal = "Successfully deleted."
         else:
             returnVal = "ERROR: Invalid argument given."
     return returnVal
+
