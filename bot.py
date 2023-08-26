@@ -113,4 +113,15 @@ async def delhotkey(ctx, *args):
 async def addhotkey(ctx, *args):
     await ctx.channel.send(addHotkey(ctx.author.id, args))
 
+
+@bot.command(
+    help = "Admin command"
+)
+async def ip(ctx):
+    msg = "You dont have permission to access this."
+    if(str(ctx.author.id) == str(os.getenv('ADMINID'))):
+        msg = str(os.popen('curl -s checkip.amazonaws.com').readline())
+
+    await ctx.channel.send(msg)
+
 bot.run(os.getenv('DISCORD_TOKEN'), log_handler=handler)
