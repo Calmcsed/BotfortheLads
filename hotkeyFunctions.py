@@ -3,17 +3,17 @@ import os
 
 load_dotenv()
 dir = os.getenv('DISCORD_DIR')
-def sendHotkey(author_id, hotkey):
+
+def sendHotkey(author_id, args):
     link = ""
-    
-    if len(hotkey) != 1:
+    if len(args) != 1:
         link = "ERROR: You have given an invalid command. You have given either too much or too little information."
     else:
+        hotkey = args[0]
         fileName = dir + "hotkey/" + str(author_id) + ".txt"
-        
-        line = searchFile((dir+"hotkey/everyone.txt"), hotkey[0])
+        line = searchFile((dir+"hotkey/everyone.txt"), hotkey)
         if line[0] == "ERR":
-            line = searchFile(fileName, hotkey[0])
+            line = searchFile(fileName, hotkey)
         
         if  line[0] != "ERR":
             link = line[2]
@@ -21,28 +21,29 @@ def sendHotkey(author_id, hotkey):
             link = "ERROR: You do not have this hotkey set up."
     return link
 
-def addHotkey(author_id, hotkey):
+def addHotkey(author_id, args):
     returnVal = ""
-    if len(hotkey) < 2:
+    if len(args) < 2:
         returnVal = "ERROR: You have given insuffcient amount of data for this command to work. Consult !help sethotkey for more information."
     else:
+        hotkey = args[0]
         fileName = dir + "hotkey/" + str(author_id) + ".txt"
         if not os.path.exists(fileName):
             file = open(fileName, "w")
             file.close()
         
         found = False
-        if searchFile(fileName, hotkey[0]) != ["ERR"]:
+        if searchFile(fileName, hotkey) != ["ERR"]:
             found = True
 
         file = open(fileName, "a")
         if not found: 
-            if len(hotkey) == 2:
-                writeLine = hotkey[0] + "," + hotkey[0]
-            elif len(hotkey) == 3:
-                writeLine = hotkey[0] + "," + hotkey[2]
+            if len(args) == 2:
+                writeLine = hotkey + "," + hotkey
+            elif len(args) == 3:
+                writeLine = hotkey + "," + args[2]
 
-            writeLine +=  "," + hotkey[1] + "\n"
+            writeLine +=  "," + args[1] + "\n"
             file.write(writeLine)
             returnVal = "Successfully added!"
         else:
