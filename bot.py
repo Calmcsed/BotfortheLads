@@ -105,7 +105,7 @@ async def delhotkey(ctx, *args):
     await ctx.channel.send(delHotkey(ctx.author.id, args))
 
 @bot.command(
-    help = ("Create a new hotkey. If given an existing hotkey name, will edit the link." +
+    help = ("Create a new hotkey." +
     "\n Command format is !addhotkey [name of hotkey] [link to send] [alias (optional)]" + 
     "\n!hotkey  To invoke a hotkey, do !hotkey. To list your hotkeys, do !listhotkey"),
     aliases = ['ahk']
