@@ -70,12 +70,12 @@ async def uptime(ctx):
 async def convert(ctx, *args):
     await ctx.channel.send(convertFunction(args))
 
-@bot.command(
+"""@bot.command(
     help = "Enter a date/time in the dd-mm-yyyy hh:mm [AM/PM (optional)] to get a universal time.",
     aliases = ["gt", "utc"]
 )
 async def getTime(ctx, *args):
-    await ctx.channel.send(getUTCTime(args))
+    await ctx.channel.send(getUTCTime(args)) """
 
 @bot.command(
     help = ("Invoke a hot key you have already created." + 

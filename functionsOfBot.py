@@ -1,5 +1,6 @@
 import discord
 import datetime as dt
+import re
 swears = ["cock", "cum", "pussy", "penis", "balls", "cumming", "dong"]
 
 def isProfane(message, mid):
@@ -42,21 +43,22 @@ def fruitReturn(fruitName):
     if fruitName == "pineapple":
         return " \|/\n AXA\n/XXX\ \n\XXX/\n `^'"
     
-def getUptime(diffTime):
+def getUptime(diffUptime):
     output = ""
 
+    diffTime = diffUptime
     months = int(diffTime/2628000)
 
-    daysDiffTime = diffTime % 2628000
-    days = int(daysDiffTime / 86400)
+    diffTime = diffTime % 2628000
+    days = int(diffTime / 86400)
 
-    hoursDiffTime = daysDiffTime % 86400
-    hours = int(hoursDiffTime / 3600)
+    diffTime = diffTime % 86400
+    hours = int(diffTime / 3600)
 
-    minDiffTime = hoursDiffTime % 3600
-    minutes = int(minDiffTime / 60)
+    diffTime = diffTime % 3600
+    minutes = int(diffTime / 60)
     
-    secondDiffTime = int(minDiffTime % 60)
+    diffTime = int(diffTime % 60)
 
     if(months > 0):
         output += str(months) + "m "
@@ -69,8 +71,8 @@ def getUptime(diffTime):
         output += str(hours) + "h "
     if(minutes >= 0):
         output += str(minutes) + "m "
-    if(secondDiffTime >= 0):
-        output += str(secondDiffTime) + "s "
+    if(diffTime >= 0):
+        output += str(diffTime) + "s "
     return output
 
 def betterLink(message):
@@ -82,9 +84,9 @@ def betterLink(message):
     return ret
 
 def convertFunction(args):
-    impUnits = ["lb", "mi", "gal", "f", "ft", "in"]
-    convUnits = [0.4535924, 1.609344, 4.54609, 0, 0.3048, 2.54]
-    metUnits = ["kg", "km", "l", "c", "m", "cm"]
+    impUnits = ["lb", "mi", "gal", "f", "ft", "in", "mpg"]
+    convUnits = [0.4535924, 1.609344, 4.54609, 0, 0.3048, 2.54, 0.425143707]
+    metUnits = ["kg", "km", "l", "c", "m", "cm", "kml"]
 
     if len(args) == 2 or len(args) == 3:
         try:
@@ -120,8 +122,13 @@ def convertFunction(args):
         return "ERROR: Invalid number of arguments given."
 
 # Got rid of all of this code because turns out you need to have an offset for each timezone you are in, which I will do another day.
-""" def getUTCTime(dateTimeTuple):
-    if len(dateTimeTuple) == 2 or len(dateTimeTuple) == 3:
+"""def getUTCTime(dateTimeTuple):
+    if len(dateTimeTuple) == 3 or len(dateTimeTuple) == 4:
+        if(len(dateTimeTuple) == 4):
+            re.search(r"[A|P][M]", dateTimeTuple[2])
+            re.search(r"[0-9]{2,2}", "")
+            
+            return "ERROR: Invalid time given."
         dates = dateTimeTuple[0].split("-")
 
         timeStr = dateTimeTuple[1]
@@ -144,5 +151,6 @@ def convertFunction(args):
 
         return ("<t:" + str((dt.datetime(argsCmd[2],argsCmd[1],argsCmd[0],argsCmd[3],argsCmd[4]).replace(tzinfo=dt.timezone.utc)).timestamp())[:-2] + ">")
     else:
-        return "ERROR: Invalid format given." """
+        return "ERROR: Incorrect number of arguments given. You must give your input as [dd]-[mm]-[yyyy] [hh]:[mm] [AM or PM (optional)] [EST/PST/EDT]"
+        """
 
