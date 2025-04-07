@@ -1,6 +1,7 @@
 import discord
 import datetime as dt
 import re
+import time
 swears = ["cock", "cum", "pussy", "penis", "balls", "cumming", "dong"]
 
 def isProfane(message, mid):
@@ -154,3 +155,15 @@ def convertFunction(args):
         return "ERROR: Incorrect number of arguments given. You must give your input as [dd]-[mm]-[yyyy] [hh]:[mm] [AM or PM (optional)] [EST/PST/EDT]"
         """
 
+def nya(args):
+    match args[0]:
+        case "ping":
+            return "pong"
+        case "fruit":
+            return fruitReturn(args[1])
+        case "uptime":
+            return getUptime((time.time() - starttime)) 
+        case "convert" | "cv":
+            return convertFunction(args[1:])
+        case _:
+            return "nya"

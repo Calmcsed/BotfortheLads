@@ -36,7 +36,8 @@ async def on_message(message):
 
     if sad(message):
         await message.channel.send("):")
-
+    if message.content.lower()[0:2] == ":3":
+        await message.channel.send(nya(message.content.lower().split(" ")[1:]))
     #IT IS EXTRREMELY IMPORTANT TO ADD THIS LINE
     #THIS LINE ALLOWS EVENT COMMANDS TO BE RUN
     await bot.process_commands(message)
