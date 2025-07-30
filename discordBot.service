@@ -1,0 +1,10 @@
+[Unit]
+Description=Script to run the discord bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/home/${USER}/LadsBot/runbot.sh
+
+[Install]
+WantedBy=default.target
