@@ -3,6 +3,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from functionsOfBot import *
 from hotkeyFunctions import *
+from calendarFunctions import *
 import os
 import time
 import logging
@@ -124,5 +125,16 @@ async def ip(ctx):
         msg = str(os.popen('curl -s checkip.amazonaws.com').readline())
 
     await ctx.channel.send(msg)
+
+@bot.command(
+    help = ("Quick add an event to your calendar." +
+            "\n!caladd [name] [start date (default is the current date for the user)] [start time (required)] [end date (default is the start date)] [end time]" + 
+            "\n start date (required) - formatted as YYYY-MM-DD, use '!' to use the current local date" +
+            "\n start time (required) - formatted as HH:MM[AM/PM (if HH is < 12)], use '!' to use the current local time" + \n
+            "\n end date (required) - use '!' to use the same value as start date" +
+            "\n end time (required) - can be formatted as +[number][h(ours)/m(inutes)], which is appended to the start time, use '!' to use the default offset value from start time")
+)
+async def caladd(ctx, *args):
+    await ctx.channel.send(addEvent(ctx.author.id, args))
 
 bot.run(os.getenv('DISCORD_TOKEN'), log_handler=handler)
