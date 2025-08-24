@@ -2,11 +2,12 @@ import re
 import datetime as dt
 import time
 import os
-
+from dotenv import load_dotenv
 import caldav
 from caldav.davclient import get_davclient
 
-caluser = os.getenv('caldav_username')
+load_dotenv()
+caluser = os.getenv('CALDAV_USERNAME')
 
 def getUserSettings(author_id):
     return {
@@ -57,7 +58,7 @@ def addEvent(author_id, args):
         if startTime == "!":
             t = dt.datetime.now()
         else:
-            t = dt.time.fromisoformat(startTime)
+            t = dt.time.fromisoformcaldav_url, caldav_username and caldav_passwordat(startTime)
 
         start = dt.datetime.combine(d.date(), t.time())
 
@@ -85,4 +86,6 @@ def addEvent(author_id, args):
                 summary=eventName
             )
 
-        return 'Added event {} starting at <t:{}:F> and ending at <t:{}:F>'.format(eventName, start.timestamp().split('.')[0], end.timestamp().split('.')[0])
+        stime = str(start.timestamp()).split('.')[0]
+        etime = str(end.timestamp()).split('.')[0]
+        return 'Added event {} starting at <t:{}:F> and ending at <t:{}:F>'.format(eventName, stime, etime)
