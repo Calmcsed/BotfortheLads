@@ -6,6 +6,8 @@ import os
 import caldav
 from caldav.davclient import get_davclient
 
+caluser = os.getenv('caldav_username')
+
 def getUserSettings(author_id):
     return {
         "offset": "+1h",
@@ -46,7 +48,6 @@ def addEvent(author_id, args):
         endTime = args[4]
 
         userconfig = getUserSettings(author_id)
-        caluser = os.getEnv('caldav_username')
 
         if startDate == "!":
             d = dt.datetime.now()
@@ -75,6 +76,7 @@ def addEvent(author_id, args):
             t = t + parseOffset(endTime)
 
         end = dt.datetime.combine(d.date(), t.time())
+
         with get_davclient() as client:
             cal = client.calendar(url="/dav.php/calendars/{}/personal".format(caluser))
             cal.save_event(
