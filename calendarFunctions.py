@@ -1,11 +1,7 @@
-import sys
 import re
-#import discord
 import datetime as dt
 import time
-
-sys.path.insert(0, "..")
-sys.path.insert(0, ".")
+import os
 
 import caldav
 from caldav.davclient import get_davclient
@@ -50,6 +46,7 @@ def addEvent(author_id, args):
         endTime = args[4]
 
         userconfig = getUserSettings(author_id)
+        caluser = os.getEnv('caldav_username')
 
         if startDate == "!":
             d = dt.datetime.now()
@@ -71,23 +68,19 @@ def addEvent(author_id, args):
             d =  dt.datetime.fromisoformat(startDate)
 
         if re.fullmatch(r'[+-]\d+?[hm]', endTime) != None:
-            t = dt.time.fromisoformat(endTime).time
+            t = dt.time.fromisoformat(endTime)
         elif endTime == "!":
             t = t + parseOffset("+15m")
         else:
             t = t + parseOffset(endTime)
 
         end = dt.datetime.combine(d.date(), t.time())
-        # with get_davclient() as client:
-        #     my_principal = client.principal()
-        #     my_new_calendar.save_event(
-        #         dtstart=,
-        #         dtend=,
-        #         uid=,
-        #         summary=eventName
-        #     )
+        with get_davclient() as client:
+            cal = client.calendar(url="/dav.php/calendars/{}/personal".format(caluser))
+            cal.save_event(
+                dtstart=start,
+                dtend=end,
+                summary=eventName
+            )
 
-
-        return 'Added event {} starting at <t:{}:F> and ending at <t:{}:F>'.format(eventName, start.timestamp(), end.timestamp())
-
-print(addEvent("", ["Event Name", "!", "!", "!", "!"]))
+        return 'Added event {} starting at <t:{}:F> and ending at <t:{}:F>'.format(eventName, start.timestamp().split('.')[0], end.timestamp().split('.')[0])
