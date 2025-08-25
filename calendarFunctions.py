@@ -51,32 +51,31 @@ def addEvent(author_id, args):
         userconfig = getUserSettings(author_id)
 
         if startDate == "!":
-            d = dt.datetime.now()
+            d = dt.datetime.now().date()
         else:
-            d = dt.datetime.fromisoformat(startDate)
+            d = dt.datetime.fromisoformat(startDate).date()
 
         if startTime == "!":
-            t = dt.datetime.now()
+            t = dt.datetime.now().time()
         else:
-            t = dt.time.fromisoformcaldav_url, caldav_username and caldav_passwordat(startTime)
+            t = dt.time.fromisoformat(startTime)
 
-        start = dt.datetime.combine(d.date(), t.time())
-
-        
+        start = dt.datetime.combine(d, t)
 
         if endDate == "!":
             d = start
         else:
-            d =  dt.datetime.fromisoformat(startDate)
+            d =  dt.datetime.fromisoformat(startDate).date()
+
+        if endTime == "!":
+            endTime = "+15m"
 
         if re.fullmatch(r'[+-]\d+?[hm]', endTime) != None:
-            t = dt.time.fromisoformat(endTime)
-        elif endTime == "!":
-            t = t + parseOffset("+15m")
+            end = dt.datetime.combine(d, t)
+            end += parseOffset(endTime)
         else:
-            t = t + parseOffset(endTime)
-
-        end = dt.datetime.combine(d.date(), t.time())
+            t = dt.time.fromisoformat(endTime)
+            end = dt.datetime.combine(d, t)
 
         with get_davclient() as client:
             cal = client.calendar(url="/dav.php/calendars/{}/personal".format(caluser))
